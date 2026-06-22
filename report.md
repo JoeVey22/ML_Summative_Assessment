@@ -113,6 +113,8 @@ class StockRecurrentModel(nn.Module):
 
 ### Comparison of RNN, GRU, and LSTM
 
+**Table 1. Comparison of RNN, GRU, and LSTM models.**
+
 | Model | Good points | Bad points |
 |---|---|---|
 | RNN | Simple structure, fast to train, and easy to understand. It can model short-term sequential patterns and is useful as a basic recurrent baseline. | Struggles with long-term dependencies because of vanishing or exploding gradients. It may forget older information in the 60-day sequence and usually performs worse than gated models. |
@@ -164,6 +166,8 @@ def evaluate(y_true, y_pred):
 ```
 
 ### Evaluation Metrics
+
+**Table 2. Model evaluation metrics on the test set.**
 
 | Model | RMSE | MAE | MAPE | R2 |
 |---|---:|---:|---:|---:|
@@ -225,3 +229,9 @@ The comparison with alternative models shows a trade-off between accuracy, simpl
 ## Conclusion
 
 This project designed and applied multiple RNN-based models for stock price prediction using public GOOGL historical financial data. The data was cleaned, normalized, split chronologically into training, validation, and testing sets, converted into 60-day sequences, and evaluated using RMSE, MAE, MAPE, and R2. GRU was the strongest RNN-based model and achieved the lowest MAE and MAPE, while the moving average baseline achieved the best RMSE and R2. This shows that recurrent neural networks can learn useful time-dependent patterns from historical stock data, but they must still be compared against simple baselines. The model remains limited by overfitting risk, dependence on historical prices, and sensitivity to unpredictable market volatility.
+
+## Source Code
+
+GitHub repository: [https://github.com/JoeVey22/ML_Summative_Assessment](https://github.com/JoeVey22/ML_Summative_Assessment)
+
+Main training source file: `src/train_stock_rnn.py`

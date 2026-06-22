@@ -15,6 +15,7 @@ PREPROCESSING_VISUAL = ROOT / "assets" / "preprocessing_flowchart.png"
 RNN_COMPARISON_VISUAL = ROOT / "RNN_GRU_LSTM_comp.png"
 FONT_NAME = "Times New Roman"
 BLACK = (0, 0, 0)
+SOURCE_CODE_URL = "https://github.com/JoeVey22/ML_Summative_Assessment"
 
 
 def set_run(run, size=11, bold=False, color=BLACK):
@@ -131,6 +132,37 @@ def add_paragraph(document, text):
     return paragraph
 
 
+def add_source_code_link(document):
+    paragraph = document.add_paragraph()
+    paragraph.paragraph_format.space_after = Pt(6)
+
+    label = paragraph.add_run("GitHub repository: ")
+    set_run(label)
+
+    relationship_id = document.part.relate_to(
+        SOURCE_CODE_URL,
+        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink",
+        is_external=True,
+    )
+    hyperlink = OxmlElement("w:hyperlink")
+    hyperlink.set(qn("r:id"), relationship_id)
+    link_run = OxmlElement("w:r")
+    run_properties = OxmlElement("w:rPr")
+    color = OxmlElement("w:color")
+    color.set(qn("w:val"), "0563C1")
+    underline = OxmlElement("w:u")
+    underline.set(qn("w:val"), "single")
+    run_properties.extend((color, underline))
+    link_run.append(run_properties)
+    link_text = OxmlElement("w:t")
+    link_text.text = SOURCE_CODE_URL
+    link_run.append(link_text)
+    hyperlink.append(link_run)
+    paragraph._p.append(hyperlink)
+
+    add_paragraph(document, "Main training source file: src/train_stock_rnn.py")
+
+
 def add_code_block(document, code):
     paragraph = document.add_paragraph()
     paragraph.paragraph_format.left_indent = Inches(0.25)
@@ -187,6 +219,17 @@ def add_figure(document, path, caption):
         caption_paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
         run = caption_paragraph.add_run(caption)
         set_run(run, size=9, bold=False)
+
+
+def add_table_caption(document, caption):
+    paragraph = document.add_paragraph()
+    paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    paragraph.paragraph_format.space_before = Pt(6)
+    paragraph.paragraph_format.space_after = Pt(3)
+    paragraph.paragraph_format.keep_with_next = True
+    run = paragraph.add_run(caption)
+    set_run(run, size=10, bold=True)
+    return paragraph
 
 
 def build():
@@ -351,6 +394,7 @@ def build():
         '        return self.regressor(output[:, -1, :])',
     )
     add_heading(document, "Comparison of RNN, GRU, and LSTM", level=2)
+    add_table_caption(document, "Table 1. Comparison of RNN, GRU, and LSTM models.")
     comparison_table = document.add_table(rows=1, cols=3)
     comparison_table.style = "Table Grid"
     headers = ["Model", "Good points", "Bad points"]
@@ -422,6 +466,7 @@ def build():
         '    return {"RMSE": rmse, "MAE": mae, "MAPE": mape, "R2": r2}',
     )
 
+    add_table_caption(document, "Table 2. Model evaluation metrics on the test set.")
     table = document.add_table(rows=1, cols=5)
     table.style = "Table Grid"
     headers = ["Model", "RMSE", "MAE", "MAPE", "R2"]
@@ -543,6 +588,9 @@ def build():
         "patterns from historical stock data, but they must still be compared against simple baselines. The model "
         "remains limited by overfitting risk, historical-data dependence, and unpredictable market volatility.",
     )
+
+    add_heading(document, "Source Code")
+    add_source_code_link(document)
 
     document.save(OUTPUT)
     print(OUTPUT)

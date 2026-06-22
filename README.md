@@ -20,11 +20,20 @@ This folder contains an English-only solution for the stock price prediction ass
 ## How to Run
 
 ```powershell
+python -m pip install -r requirements.txt
 python src\train_stock_rnn.py
 ```
 
 The script will reuse `data/googl_daily_2019_2025.csv` if it already exists. Delete the CSV if you want to download fresh Yahoo Finance data.
 
+To rebuild the Word report after regenerating the output files, run:
+
+```powershell
+python src\build_report_docx.py
+```
+
 ## Source Code Link
 
-If a URL is required for submission, upload this folder to GitHub or Google Drive and use that share link. The main source file is `src/train_stock_rnn.py`.
+GitHub repository: https://github.com/JoeVey22/ML_Summative_Assessment
+
+The main source file is `src/train_stock_rnn.py`.

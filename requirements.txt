@@ -4,3 +4,4 @@ matplotlib
 scikit-learn
 torch
 pypdf
+python-docx
