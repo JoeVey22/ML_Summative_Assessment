@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+
+# Microsoft Office temporary lock files
+~$*
+
+# Local render/check folders
+outputs/docx_render_check/

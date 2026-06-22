@@ -1,0 +1,51 @@
+{
+  "symbol": "GOOGL",
+  "dataset_source": "Yahoo Finance chart API",
+  "date_range": "2019-01-02 to 2025-12-30",
+  "rows_after_cleaning": 1759,
+  "lookback_days": 60,
+  "train_rows": 1171,
+  "validation_rows": 176,
+  "test_rows": 352,
+  "device": "cuda",
+  "models": {
+    "rnn": {
+      "RMSE": 34.82819159370035,
+      "MAE": 21.52522087097168,
+      "MAPE": 8.783113479614258,
+      "R2": 0.45600444078445435
+    },
+    "gru": {
+      "RMSE": 26.06208899743373,
+      "MAE": 15.539910316467285,
+      "MAPE": 6.280777454376221,
+      "R2": 0.6953845024108887
+    },
+    "lstm": {
+      "RMSE": 34.16680560820326,
+      "MAE": 20.632793426513672,
+      "MAPE": 8.365352630615234,
+      "R2": 0.47646915912628174
+    }
+  },
+  "training_summary": {
+    "rnn": {
+      "best_validation_epoch": 37,
+      "best_validation_loss": 0.0030815117061138153
+    },
+    "gru": {
+      "best_validation_epoch": 32,
+      "best_validation_loss": 0.0016404374036937952
+    },
+    "lstm": {
+      "best_validation_epoch": 32,
+      "best_validation_loss": 0.0027365458663553
+    }
+  },
+  "moving_average_baseline": {
+    "RMSE": 23.608016187399855,
+    "MAE": 19.224941286173735,
+    "MAPE": 9.122996812313373,
+    "R2": 0.7500503560505377
+  }
+}
