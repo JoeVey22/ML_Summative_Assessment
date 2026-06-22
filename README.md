@@ -19,18 +19,13 @@ This folder contains an English-only solution for the stock price prediction ass
 
 ## How to Run
 
-```powershell
-python -m pip install -r requirements.txt
-python src\train_stock_rnn.py
-```
+![Install dependencies and run the training script](docs/images/run-training.png)
 
 The script will reuse `data/googl_daily_2019_2025.csv` if it already exists. Delete the CSV if you want to download fresh Yahoo Finance data.
 
 To rebuild the Word report after regenerating the output files, run:
 
-```powershell
-python src\build_report_docx.py
-```
+![Rebuild the Word report](docs/images/rebuild-report.png)
 
 ## Source Code Link
 

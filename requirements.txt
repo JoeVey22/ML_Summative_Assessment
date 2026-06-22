@@ -5,3 +5,5 @@ scikit-learn
 torch
 pypdf
 python-docx
+Pillow
+Pygments

@@ -6,6 +6,10 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.shared import Inches, Pt, RGBColor
+from PIL import Image
+from pygments import highlight
+from pygments.formatters import ImageFormatter
+from pygments.lexers import PythonLexer
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -13,6 +17,7 @@ OUTPUT = ROOT / "KIE4031_Stock_Price_Prediction_Report.docx"
 FRONT_PAGE_LOGO = ROOT / "assets" / "front_page_logo.png"
 PREPROCESSING_VISUAL = ROOT / "assets" / "preprocessing_flowchart.png"
 RNN_COMPARISON_VISUAL = ROOT / "RNN_GRU_LSTM_comp.png"
+CODE_IMAGE_DIR = ROOT / "assets" / "code_snippets"
 FONT_NAME = "Times New Roman"
 BLACK = (0, 0, 0)
 SOURCE_CODE_URL = "https://github.com/JoeVey22/ML_Summative_Assessment"
@@ -164,31 +169,34 @@ def add_source_code_link(document):
 
 
 def add_code_block(document, code):
+    block_number = getattr(document, "_code_block_number", 0) + 1
+    document._code_block_number = block_number
+    CODE_IMAGE_DIR.mkdir(parents=True, exist_ok=True)
+    image_path = CODE_IMAGE_DIR / f"code_snippet_{block_number}.png"
+
+    png_bytes = highlight(
+        code,
+        PythonLexer(),
+        ImageFormatter(
+            style="friendly",
+            font_name="Consolas",
+            font_size=20,
+            line_numbers=False,
+            image_pad=24,
+            line_pad=3,
+            bg="#F7F7F7",
+        ),
+    )
+    image_path.write_bytes(png_bytes)
+    with Image.open(image_path) as image:
+        image.save(image_path, dpi=(192, 192))
+        width_inches = min(6.1, image.width / 192)
+
     paragraph = document.add_paragraph()
-    paragraph.paragraph_format.left_indent = Inches(0.25)
-    paragraph.paragraph_format.right_indent = Inches(0.15)
     paragraph.paragraph_format.space_before = Pt(3)
     paragraph.paragraph_format.space_after = Pt(8)
-    paragraph.paragraph_format.line_spacing = 1.0
-
-    properties = paragraph._p.get_or_add_pPr()
-    shading = OxmlElement("w:shd")
-    shading.set(qn("w:fill"), "F2F2F2")
-    properties.append(shading)
-
-    border = OxmlElement("w:pBdr")
-    left = OxmlElement("w:left")
-    left.set(qn("w:val"), "single")
-    left.set(qn("w:sz"), "8")
-    left.set(qn("w:space"), "6")
-    left.set(qn("w:color"), "808080")
-    border.append(left)
-    properties.append(border)
-
-    run = paragraph.add_run(code)
-    run.font.name = "Courier New"
-    run.font.size = Pt(8)
-    run.font.color.rgb = RGBColor(31, 31, 31)
+    paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    paragraph.add_run().add_picture(str(image_path), width=Inches(width_inches))
     return paragraph
 
 
